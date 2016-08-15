@@ -39,10 +39,10 @@ Route::get('/viewProjectList','DisplayController@viewProjectList');
 Route::post('/editProjectList/{ID}','DisplayController@editProjectList');
 
 Route::get('/viewClientList','DisplayController@viewClientList');
-Route::get('screenSetUp','DisplayController@screenSetup');
+Route::get('/screenSetUp','DisplayController@screenSetup');
 Route::post('/addProjectActivity','DisplayController@addProjectActivity');
 
-Route::post('screenSetUp/{id}', 'DisplayController@columnNameUpdate');
+Route::post('/screenSetUp/{id}', 'DisplayController@columnNameUpdate');
 Route::get('/getProjects',function(){ $input = Input::get('option');
   Log::info("in route input ".$input);
 	$client = Clients::find($input);
