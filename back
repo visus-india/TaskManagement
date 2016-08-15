@@ -1,0 +1,34 @@
+{!!Form ::open() !!}
+
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'Enter Due Date','name'=>'duedate')); !!}</td>
+<td>{{$projectactivity->OVERDUEBY}}</td>
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'Enter Close date Date','name'=>'close Date')); !!}</td>
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'','name'=>'close Date')); !!}</td>
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'','name'=>'close Date')); !!}</td>
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'','name'=>'close Date')); !!}</td>
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'','name'=>'close Date')); !!}</td>
+<td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'','name'=>'close Date')); !!} </td>
+  <td>{!! Form::text('', '',array('class'=> 'form-control','placeholder'=>'','name'=>'close Date')); !!} </td>
+  <td>
+    <a href =" {{ url('')  }}" class="button btn btn-success btn-small">
+            <i class="shortcut-icon icon-edit"></i>
+
+  </td>
+
+  {!! Form :: close()!!}
+
+  //  @foreach ($category as $category)
+  //   <option value={{$category->ID}}>{{ $category->CATEGORY }}</option>
+  //  @endforeach
+
+
+  @foreach ($statusValue as $statusValue)
+    <option >{!!$statusValue ->KEYVALUE!!}</option>
+  @endforeach
+
+  @if(isset($titleValue))
+  @foreach ($titleValue as $titleValue)
+    <option  >{!!$titleValue ->KEYVALUE!!}</option>
+  @endforeach
+
+  @endif
