@@ -34,6 +34,22 @@ jQuery(document).ready(function($){
 	});
 
 	jQuery(document).ready(function($){
+	  	$('#clientsearch').change(function(){
+
+				$.get("{{ url('/getProjects')}}",
+					{ option: $(this).val() },
+					function(data) {
+						var project = $('#projectsearch');
+						project.empty();
+
+						$.each(data, function(index, element) {
+
+				            project.append("<option value='"+ element.ID +"'>" + element.PROJECTNAME + "</option>");
+				        });
+					});
+				});
+		});
+	jQuery(document).ready(function($){
 		$('#project').change(function(){
 			$.get("{{ url('/getCategoryList')}}",
 				{ option: $(this).val() },
@@ -85,7 +101,7 @@ jQuery(document).ready(function($){
 		'OPENISSUE':$('input[name=OPENISSUE]').val(),
 		'REMARKS':$('input[name=REMARKS]').val(),
 		'DOCREF':$('input[name=DOCREF]').val(),
-		'ACTIVESTATUS':$('input[name=ACTIVESTATUS]').val(),
+		'ACTIVESTATUS':$('select[name=ACTIVESTATUS]').val(),
 		'ID':$('input[name=ID]').val(),
 		'_token': $('input[name=_token]').val()
 				},
@@ -237,6 +253,45 @@ $(document).ready(function() {
 
  <div>
   <div class="widget ">
+		@if (isset ($taskSearch))
+
+			<div class="widget-content">
+			{{ Form::open(array('url' => '/searchProject', 'method' => 'post')) }}
+			<table class="span6 offset3 table ">
+			<tr>
+			 <td>
+							 {!! Form::label('Client Name', 'Client Name' ,array('style'=>'font-weight:600; text-transform: uppercase;')); !!}
+								<select id="clientsearch" name="clientsearch">
+									<option>Select Client Name </option>
+									@foreach ($clientsearch as $clientsearch)
+			<option value={{$clientsearch->ID}}>{{ $clientsearch->CLIENTNAME }}</option>
+									@endforeach
+
+								</select>
+							</td>
+							<td>
+			{!! Form::label('Project Name', 'Project Name' ,array('style'=>'font-weight:600; text-transform: uppercase;')); !!}
+								<select id="projectsearch" name="projectsearch">
+									<option>Please choose the Client first</option>
+								</select>
+							</td>
+
+
+
+
+
+			</tr>
+
+			</table>
+			<div class="span6 offset6">
+									<button type="submit" class="button btn btn-success btn-small">
+														<i class="fa fa-edit">Search</i>
+													</button>
+
+								</div>
+						{{ Form::close()}}
+					</div>
+		@endif
     @if (isset($projects ) && isset($clients) && isset($category) &&isset($activists))
     <div class="widget-header span6 offset3"> <i class="icon-list-alt"></i>
       <h3> Project Tasks </h3>
@@ -382,9 +437,10 @@ $(document).ready(function() {
 																					<input type ="file"  name='DOCREF' id = 'docref'  value ='{!! $projectactivity->DOCREF!!}', style="width:80px">
 																				</td>
 																				<td>
-																					<select name="ACTIVESTATUS"  id ="ACTIVESTATUS" class='form-control input-sm' style="width:50px" >
+																					<select name="ACTIVESTATUS"  id ="ACTIVESTATUS" class='form-control input-sm' style="width:70px" >
 																						@foreach ($statusValue as $statusValueDisplay)
-																					    <option >{!!$statusValueDisplay ->KEYVALUE!!}</option>
+																						<option >{!!$statusValueDisplay ->KEYVALUE!!}</option>
+
 																					  @endforeach
 
 																						</select>
@@ -401,7 +457,10 @@ $(document).ready(function() {
 
 								 @if (isset($projectactivityDisplay))
 
+
 								 @foreach ($projectactivityDisplay as $projectactivityDisplay)
+								 <input type ="hidden" name='ID' id = 'ID'  value ='{!! $projectactivityDisplay->ID !!}',class = 'form-control' style="width:60px">
+
 								<tr>
 									<td>{{$projectactivityDisplay->CATEGORY}}</td>
 									<td>{{$projectactivityDisplay->ACTIVITY}}</td>
@@ -409,24 +468,69 @@ $(document).ready(function() {
 									<td>{{ $projectactivityDisplay->FIRST_NAME .' '.$projectactivityDisplay->LAST_NAME }}</td>
 
 
-								 <td>{{$projectactivityDisplay->DATEDUE}}</td>
+									<input type ="hidden" name='ID' id = 'ID'  value ='{!! $projectactivityDisplay->ID !!}',class = 'form-control' style="width:60px">
 
-									 <td>{{$projectactivityDisplay->CLOSEDATE}}</td>
-									  <td>{{$projectactivityDisplay->CONTACTTITLE}}</td>
-										 <td>{{$projectactivityDisplay->CONTACTFIRSTNAME}}</td>
-										  <td>{{$projectactivityDisplay->CONTACTLASTNAME}}</td>
-											 <td>{{$projectactivityDisplay->CONTACTEMAILID}}</td>
-											  <td>{{$projectactivityDisplay->MOBILENO}}</td>
-												  <td>{{$projectactivityDisplay->PHONENO}}</td>
+ 									<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-														  <td>{{$projectactivityDisplay->FAXNO}}</td>
-															  <td>{{$projectactivityDisplay->OPENISSUE}}</td>
+ 									<td>
+ 									<input type ="text" name='DATEDUE' id = 'datedue'  value ='{!! $projectactivityDisplay->DATEDUE!!}',class = 'form-control' style="width:60px">
+ 									</td>
 
-												  <td>{{$projectactivityDisplay->REMARKS}}</td>
-													  <td><a href="" class="link" >{{$projectactivityDisplay->DOCREF}}</a></td>
-														<td>{{$projectactivityDisplay->ACTIVESTATUS}}</td>
-<td>
-</td>
+ 										<td><input type ="text" name='CLOSEDATE' id = 'closedate'  value ='{!! $projectactivityDisplay->CLOSEDATE!!}',class = 'form-control input-sm' style="width:60px">
+ 										</td>
+
+ 											<td>
+ 												{{$projectactivityDisplay->CONTACTTITLE}}
+ 											</td>
+ 												<td>{{$projectactivityDisplay->CONTACTFIRSTNAME}}
+ 												</td>
+
+
+ 															<td>
+ {{$projectactivityDisplay->CONTACTLASTNAME}}
+ 															</td>
+ 																<td>
+ {{$projectactivityDisplay->CONTACTEMAILID}}
+ 																</td>
+ 																	<td>
+ {{$projectactivityDisplay->MOBILENO}}
+ 																	</td>
+ 																		<td>
+
+ 																	{{$projectactivityDisplay->PHONENO}}
+ 																	</td>
+ 																	<td>
+
+ 																	{{$projectactivityDisplay->FAXNO}}
+ 																</td>
+ 																			<td>
+
+ 																			<input type ="text" value= '{!!$projectactivityDisplay->OPENISSUE !!}'  name='OPENISSUE' id = 'openissue'  ,class = 'form-control' style="width:100px">
+
+
+ 																		</td>
+ 																				<td>
+
+ 																				<input type ="text" size =2 name='REMARKS' id = 'remarks'  value ='{!! $projectactivityDisplay->REMARKS!!}',class = 'form-control' style="width:100px">
+ 																			</td>
+ 																					<td>
+ 																					<input type ="file"  name='DOCREF' id = 'docref'  value ='{!! $projectactivityDisplay->DOCREF!!}', style="width:80px">
+ 																				</td>
+ 																				<td>
+ 																					<select name="ACTIVESTATUS"  id ="ACTIVESTATUS" class='form-control input-sm' style="width:70px" >
+ 																						@foreach ($statusValue as $statusValueDisplay)
+																							<option @if ($projectactivityDisplay->ACTIVESTATUS == $statusValueDisplay ->KEYVALUE) selected @endif >{!!$statusValueDisplay ->KEYVALUE!!}</option>
+
+ 																					  @endforeach
+
+ 																						</select>
+ 																				</td>
+
+ <td>
+ 	<button type="submit" name = "saveProjectActivity" id = "saveProjectActivity" class="button btn btn-success btn-small">
+ 						<i class="shortcut-icon icon-edit"> </i>
+ 					</button>
+ </td>
 
 
 										</tr>
