@@ -219,30 +219,36 @@ $(document).ready(function() {
     <!-- /widget-header -->
     <div class="widget-content">
       <div class="shortcuts">
+				<a href={!! url('/viewKeyValueList') !!} class="shortcut">
+				  <i class="shortcut-icon icon-list-alt"></i>
+				    <span class="shortcut-label">Key Value List</span> </a>
+
+						<a href={!! url('/viewActivityList') !!} class="shortcut">
+				        <i class="shortcut-icon icon-list-alt"></i>
+				          <span class="shortcut-label">Activity List</span> </a>
 
     <a href={!! url('/viewClientList') !!} class="shortcut">
       <i class="shortcut-icon icon-list-alt"></i>
         <span class="shortcut-label">Client List</span> </a>
+
+				<a href={!! url('/Activists') !!} class="shortcut">
+				  <i class="shortcut-icon icon-user"></i>
+				    <span class="shortcut-label">Activists</span> </a>
+
 				<a href={!! url('/viewProjectList') !!}  class="shortcut">
 				  <i class="shortcut-icon icon-list-alt"></i>
 				    <span class="shortcut-label">Projects</span> </a>
 
-<a href={!! url('/viewKeyValueList') !!} class="shortcut">
-  <i class="shortcut-icon icon-list-alt"></i>
-    <span class="shortcut-label">Key Value List</span> </a>
 
-		<a href={!! url('/viewActivityList') !!} class="shortcut">
-        <i class="shortcut-icon icon-list-alt"></i>
-          <span class="shortcut-label">Activity List</span> </a>
-<a href={!! url('/Activists') !!} class="shortcut">
-  <i class="shortcut-icon icon-user"></i>
-    <span class="shortcut-label">Activists</span> </a>
+						<a href={!! url('/Tasks') !!} class="shortcut">
+							<i class="shortcut-icon icon-list-alt"></i>
+								<span class="shortcut-label">Task List</span> </a>
+
+
 		<a href={!! url('/projectSetup') !!} class="shortcut">
 		  <i class="shortcut-icon icon-bookmark"></i>
 		    <span class="shortcut-label">Project Setup</span> </a>
-				<a href={!! url('/Tasks') !!} class="shortcut">
-				  <i class="shortcut-icon icon-list-alt"></i>
-				    <span class="shortcut-label">Task List</span> </a>
+
 </div>
       <!-- /shortcuts -->
     </div>
@@ -548,6 +554,15 @@ $(document).ready(function() {
              <div class="widget-header span12"> <i class="icon-list-alt"></i>
                <h3> Activist Details</h3>
              </div>
+						 @if (count($errors) > 0)
+<div class="alert alert-danger">
+<ul>
+		@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+		@endforeach
+</ul>
+</div>
+@endif
              <!-- /widget-header -->
              <div class="widget-content span12  ">
 
@@ -649,7 +664,6 @@ $(document).ready(function() {
                                 </table>
                                     </div>
                                     <div class="modal-footer">
-                                      <button class="button btn btn-success btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
                                       <button class="button btn btn-success btn-small">Save </button>
                                     </div>
                                     {!!Form::close() !!}
@@ -667,6 +681,15 @@ $(document).ready(function() {
                       <div class="widget-header span12" style ="text-align:center"> <i class="icon-list-alt"></i>
                         <h3> Activity List</h3>
                       </div>
+											@if (count($errors) > 0)
+		<div class="alert alert-danger">
+				<ul>
+						@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+						@endforeach
+				</ul>
+		</div>
+@endif
                       <!-- /widget-header -->
                       <div class="widget-content  span8 offset2">
                         <table id ="activityListTable" class="table table-striped table-bordered">
@@ -740,18 +763,32 @@ $(document).ready(function() {
                           </thead>
                           @if (isset($activityListLabel))
                             {!! Form::open(array('url' => '/saveActivityList', 'method' => 'post')) !!}
-                           @foreach ($activityListLabel as $activityListLabel)
+														<tr>
+															<td>
+														{!! Form::label('CATEGORY', 'CATEGORY', array('class' => ' control-label')); !!}
+													</td>
+													<td>
+														<select id="CATEGORY" name="CATEGORY">
+															<option>Select Category </option>
+															@foreach ($categoryList as $categoryListSelect)
+					 <option>{{ $categoryListSelect->KEYVALUE }}</option>
+															@endforeach
 
-                               <tr>
+														</select>
+													</td>
+												</tr>
+
+													 <tr>
+
                                  <td>
-                          {!! Form::label($activityListLabel->COLUMN_DISPLAY, $activityListLabel->COLUMN_DISPLAY , array('class' => ' control-label')); !!}
+                          {!! Form::label('ACTIVITY', 'ACTIVITY' , array('class' => ' control-label')); !!}
                         </td>
 
                         <td>
-                          {!! Form::text($activityListLabel->COLUMN_NAME, '',array('class'=> 'form-control','placeholder'=>'Enter '.$activityListLabel->COLUMN_DISPLAY,'name'=>$activityListLabel->COLUMN_NAME)); !!}
+                          {!! Form::text('ACTIVITY', '',array('class'=> 'form-control','placeholder'=>'Enter ACTIVITY','name'=>'ACTIVITY')); !!}
                         </td>
-                        </tr>
-                          @endforeach
+
+
                           <tr>
                             <td>
                               {!! Form::label('ACTIVE STATUS', 'ACTIVE STATUS' , array('class' => ' control-label')); !!}
@@ -769,7 +806,7 @@ $(document).ready(function() {
                     </table>
                         </div>
                         <div class="modal-footer">
-                          <button class="button btn btn-success btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
+
                           <button class="button btn btn-success btn-small">Save </button>
                         </div>
                         {!!Form::close() !!}
@@ -786,6 +823,15 @@ $(document).ready(function() {
                       <div class="widget-header  span12 " style="text-align:center"> <i class="icon-list-alt"></i>
                         <h3> Project List</h3>
                       </div>
+											@if (count($errors) > 0)
+		<div class="alert alert-danger">
+				<ul>
+						@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+						@endforeach
+				</ul>
+		</div>
+@endif
                       <!-- /widget-header -->
                       <div class="widget-content  span6 offset3">
                         <table id="projectTable" class="table table-striped table-bordered">
@@ -900,7 +946,6 @@ $(document).ready(function() {
                     </table>
                         </div>
                         <div class="modal-footer">
-                          <button class="button btn btn-success btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
                           <button class="button btn btn-success btn-small">Save </button>
                         </div>
                         {!!Form::close() !!}
@@ -917,6 +962,16 @@ $(document).ready(function() {
                       <div class="widget-header span12"> <i class="icon-list-alt"></i>
                         <h3> Client List</h3>
                       </div>
+										</div>
+									 @if (count($errors) > 0)
+			 <div class="alert alert-danger">
+			 <ul>
+					@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+					@endforeach
+			 </ul>
+			 </div>
+			 @endif
                       <!-- /widget-header -->
                       <div class="widget-content span12 ">
                         <table id ="clientTable" class="table table-striped table-bordered">
@@ -1015,7 +1070,6 @@ $(document).ready(function() {
 
                     </table>
                     <div class="modal-footer">
-                      <button class="button btn btn-success btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
                       <button class="button btn btn-success btn-small">Save </button>
                     </div>
                     {!!Form::close() !!}
@@ -1024,6 +1078,15 @@ $(document).ready(function() {
 
 
                       @if (isset($keyValueList ))
+											@if (count($errors) > 0)
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                       <div class="widget-header   span12" style="text-align:center" > <i class="icon-list-alt"></i>
                         <h3> Key Value List</h3>
                       </div>
@@ -1121,7 +1184,6 @@ $(document).ready(function() {
                     </table>
 
                     <div class="modal-footer">
-                      <button class="button btn btn-success btn-small" data-dismiss="modal" aria-hidden="true">Close</button>
                       <button class="button btn btn-success btn-small">Save </button>
                     </div>
                     {!!Form::close() !!}
