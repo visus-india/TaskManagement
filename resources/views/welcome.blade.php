@@ -379,8 +379,7 @@ $(document).ready(function() {
 																				<input type ="text" size =2 name='REMARKS' id = 'remarks'  value ='{!! $projectactivity->REMARKS!!}',class = 'form-control' style="width:100px">
 																			</td>
 																					<td>
-
-																					<input type ="file" name='DOCREF' id = 'docref'  value ='{!! $projectactivity->DOCREF!!}',class = button btn btn-succes' style="width:60px">
+																					<input type ="file"  name='DOCREF' id = 'docref'  value ='{!! $projectactivity->DOCREF!!}', style="width:80px">
 																				</td>
 																				<td>
 																					<select name="ACTIVESTATUS"  id ="ACTIVESTATUS" class='form-control input-sm' style="width:50px" >
@@ -460,9 +459,8 @@ $(document).ready(function() {
 
                           </thead>
                           <tbody style="font-size:10px;">
-	@foreach ($activists as $activists)
+@foreach ($activists as $activists)
                           <tr>
-
                             <td>
                           {{$activists->TITLE  }}
                              </td>
