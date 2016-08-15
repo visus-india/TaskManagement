@@ -131,6 +131,19 @@ class DisplayController extends Controller
 
           }
 
+          public function editClientList(Request $req)
+          {
+            $client = new Clients;
+            $client ->fill($req->all());
+
+              Log::info("before client edit".$client);
+            $client->save();
+            Log::info("in save keyvalue".$client);
+            return DisplayController:: viewClientList();
+
+          }
+
+
 
           public function saveActivityList(Request $req)
           {
