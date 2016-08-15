@@ -20,14 +20,36 @@ class DisplayController extends Controller
   }
     public function viewTasks()
     {
-
+      $taskSearch = "true";
       $tableColumns = Table_Column_Names::orderBy('ID', 'asc')
       -> where ('MODULE','=','TASK')->get();
-      $projectactivityDisplay =ProjectActivity::orderBy('PROJECT_ACTIVITY.LASTUPDATEDATE','desc')
-      -> join ('ACTIVISTS', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'ACTIVISTS.ID')
-      ->select('PROJECT_ACTIVITY.*','ACTIVISTS.FIRST_NAME as FIRST_NAME','ACTIVISTS.LAST_NAME as LAST_NAME', 'ACTIVISTS.ID as ActivistID1')
-      ->get();
-      	return view('welcome', [
+      // $projectactivityDisplay =ProjectActivity::orderBy('PROJECT_ACTIVITY.LASTUPDATEDATE','desc')
+      // -> join ('ACTIVISTS', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'ACTIVISTS.ID')
+      // ->select('PROJECT_ACTIVITY.*','ACTIVISTS.FIRST_NAME as FIRST_NAME','ACTIVISTS.LAST_NAME as LAST_NAME', 'ACTIVISTS.ID as ActivistID1')
+      // ->get();
+$clientsearch =  Clients::orderBy('ID', 'asc') ->get();
+        $projectSearch =  Projects::orderBy('ID', 'asc') ->get();
+      	return view('welcome', ['taskSearch' => $taskSearch, 'projectSearch' =>$projectSearch, 'clientsearch' =>$clientsearch,
+            'tableColumns' => $tableColumns]);
+
+      }
+
+      public function searchProject(Request $req)
+      {
+        $projectactivityDisplay =ProjectActivity::orderBy('PROJECT_ACTIVITY.LASTUPDATEDATE','desc')
+        -> join ('ACTIVISTS', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'ACTIVISTS.ID')
+        ->select('PROJECT_ACTIVITY.*','ACTIVISTS.FIRST_NAME as FIRST_NAME','ACTIVISTS.LAST_NAME as LAST_NAME', 'ACTIVISTS.ID as ActivistID1')
+        ->where ('PROJECTID','=',$req->projectsearch)
+        ->get();
+        $taskSearch = "true";
+        $tableColumns = Table_Column_Names::orderBy('ID', 'asc')
+        -> where ('MODULE','=','TASK')->get();
+        $statusValue = KeyValues :: orderBy('ID' ,'desc')
+          ->where ('KEYVALUETYPE','=', 'Status') ->get();
+
+        $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
+          $projectSearch =  Projects::orderBy('ID', 'asc') ->get();
+        return view('welcome', ['statusValue' => $statusValue, 'taskSearch' => $taskSearch, 'projectSearch' =>$projectSearch, 'clientsearch' =>$clientsearch,
             'tableColumns' => $tableColumns,'projectactivityDisplay'=>$projectactivityDisplay]);
 
       }
