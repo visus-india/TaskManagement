@@ -460,9 +460,9 @@ $(document).ready(function() {
 
                           </thead>
                           <tbody style="font-size:10px;">
-
-                          <tr>
 	@foreach ($activists as $activists)
+                          <tr>
+
                             <td>
                           {{$activists->TITLE  }}
                              </td>
