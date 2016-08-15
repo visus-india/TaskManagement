@@ -368,8 +368,8 @@ class DisplayController extends Controller
       ->get();
       $selected = new Projects;
       $selected  = Projects::orderBy('Projects.LASTUPDATEDATE','desc')
-      -> join ('Clients', 'Projects.CLIENTID', '=', 'Clients.ID')
-      ->where ('Projects.ID','=',$selectedProject )
+      -> join ('CLIENTS', 'Projects.CLIENTID', '=', 'CLIENTS.ID')
+      ->where ('PROJECTS.ID','=',$selectedProject )
       -> where ('CLIENTID', '=', $selectedClient)
                   -> get();
 
