@@ -130,7 +130,8 @@ $(document).ready(function() {
         jQueryUI:false,
         paging:         false,
         searching:false,
-				scrollX:true
+				scrollX:true,
+				"aaSorting": [],
     } );
 
 } );
@@ -496,7 +497,7 @@ $(document).ready(function() {
                         </tbody>
                       </table>
 
-                      <div style="text-align:right">
+                      <div class ="span10"style="  text-align:right">
                               <a href="#addActivist" role="button" class="button btn btn-success btn-small" data-toggle="modal">                      								<i class="fa fa-save">Add</i>                              		</a>
 														</div>
 
@@ -828,8 +829,6 @@ $(document).ready(function() {
                     Client Status
                       </th>
 
-<th>
-</th>
 
 
 
@@ -860,12 +859,18 @@ $(document).ready(function() {
                 <td>
                 {!! $clientsList->FAXNO !!}                      </td>
                 <td>
-                {!! $clientsList->ACTIVESTATUS !!}                      </td>
-                <td>
-                  <a href =" {{ url('')  }}" class="button btn btn-success btn-small">
-                          <i class="shortcut-icon icon-edit"></i>
+									{!! Form::open(array('url' => '/editClientList/'.$clientsList->ID, 'method' => 'post')) !!}
+							   <select name="ACTIVESTATUS"  id ="ACTIVESTATUS" class='form-control input-sm' style="width:50px";  >
+							   <option  @if($clientsList->ACTIVESTATUS =='Y') selected @endif value ='Y' >Y</option>
+							   <option value ='N' @if($clientsList->ACTIVESTATUS =='N') selected @endif >N</option>
+							     </select>
 
-                        </a>
+
+							   <button class="button btn btn-success btn-small">
+							           <i class="shortcut-icon icon-edit"></i>
+
+							         </button>
+							 				  {!! Form::close()!!}
                 </td>
 
 
@@ -961,9 +966,10 @@ $(document).ready(function() {
           <i class="shortcut-icon icon-edit"></i>
 
         </button>
+				  {!! Form::close()!!}
             </td>
                       </tr>
-                      {!! Form::close()!!}
+
                         @endforeach
                       </tbody></table>
                         <div style="text-align:right">
