@@ -24,7 +24,7 @@ class DisplayController extends Controller
       $tableColumns = Table_Column_Names::orderBy('ID', 'asc')
       -> where ('MODULE','=','TASK')->get();
       $projectactivityDisplay =ProjectActivity::orderBy('PROJECT_ACTIVITY.LASTUPDATEDATE','desc')
-      -> join ('Activists', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'Activists.ID')
+      -> join ('ACTIVISTS', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'ACTIVISTS.ID')
       ->select('PROJECT_ACTIVITY.*','ACTIVISTS.FIRST_NAME as FIRST_NAME','ACTIVISTS.LAST_NAME as LAST_NAME', 'ACTIVISTS.ID as ActivistID1')
       ->get();
       	return view('welcome', [
@@ -176,9 +176,9 @@ class DisplayController extends Controller
             public function viewProjectList()
             {
               $clientNames= Clients::orderBy('ID', 'asc')->get();
-              $listProjects = Projects::orderBy('Projects.LASTUPDATEDATE','desc')
-              -> join ('Clients', 'Projects.CLIENTID', '=', 'Clients.ID')
-                          -> get(['Projects.ID','CLIENTNAME','PROJECTNAME', 'Projects.ACTIVESTATUS']);
+              $listProjects = Projects::orderBy('PROJECTS.LASTUPDATEDATE','desc')
+              -> join ('CLIENTS', 'PROJECTS.CLIENTID', '=', 'CLIENTS.ID')
+                          -> get(['PROJECTS.ID','CLIENTNAME','PROJECTNAME', 'PROJECTS.ACTIVESTATUS']);
                  Log::info ("list projects ". $listProjects);
                  $projectLabel = Table_Column_Names::orderBy('ID', 'asc')
                  -> where ('MODULE','=','PROJECT')
