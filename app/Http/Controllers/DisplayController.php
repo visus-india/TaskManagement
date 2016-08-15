@@ -362,7 +362,7 @@ class DisplayController extends Controller
     -> where ('MODULE','=','TASK')->get();
       $projectactivity  = new ProjectActivity;
       $projectactivity =ProjectActivity::orderBy('PROJECT_ACTIVITY.LASTUPDATEDATE','desc')
-      -> join ('Activists', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'Activists.ID')
+      -> join ('ACTIVISTS', 'PROJECT_ACTIVITY.ACTIVISTID', '=', 'ACTIVISTS.ID')
       ->select('PROJECT_ACTIVITY.*','ACTIVISTS.FIRST_NAME as FIRST_NAME','ACTIVISTS.LAST_NAME as LAST_NAME', 'ACTIVISTS.ID as ActivistID1')
       ->where('PROJECTID','=',$selectedProject)
       ->get();
