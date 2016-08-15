@@ -41,6 +41,8 @@ Route::post('/editProjectList/{ID}','DisplayController@editProjectList');
 Route::get('/viewClientList','DisplayController@viewClientList');
 Route::get('/screenSetUp','DisplayController@screenSetup');
 Route::post('/addProjectActivity','DisplayController@addProjectActivity');
+Route::post('/editClientList/{ID}','DisplayController@editClientList');
+
 
 Route::post('/screenSetUp/{id}', 'DisplayController@columnNameUpdate');
 Route::get('/getProjects',function(){ $input = Input::get('option');
