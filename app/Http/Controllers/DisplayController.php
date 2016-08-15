@@ -9,6 +9,7 @@ use App\Clients;
 use App\KeyValues;
 use App\ProjectActivity;
 use App\ActivityList;
+use Validator;
 use DB;
 use Log;
 class DisplayController extends Controller
@@ -16,6 +17,7 @@ class DisplayController extends Controller
 
   public function view()
   {
+
           return view('welcome');
   }
     public function viewTasks()
@@ -61,9 +63,13 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
         -> where ('MODULE','=','ACTIVITYLIST')
         -> where ('COLUMN_NAME', '!=', 'S.NO')
         -> where ('COLUMN_NAME', '!=', 'ACTIVESTATUS')->get();
-        Log::info("in add activityList".$activityListLabel );
+
+        $categoryList = KeyValues::orderBy('LASTUPDATEDDATE', 'desc')
+        ->where('KEYVALUETYPE','=','Category')->get();
+
+        Log::info("in add activityList".$categoryList );
         $fieldDisabled ='';
-        	return view('welcome', [
+        	return view('welcome', ['categoryList' =>$categoryList,
               'activityList' => $activityList,'activityListLabel' => $activityListLabel,'fieldDisabled' =>$fieldDisabled]);
 
         }
@@ -72,7 +78,7 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
         {
 
           $keyValueList = KeyValues::orderBy('LASTUPDATEDDATE', 'desc')->get();
-          $keyValueLabel = Table_Column_Names::orderBy('ID', 'desc')
+          $keyValueLabel = Table_Column_Names::orderBy('ID', 'asc')
           -> where ('MODULE','=','KEYVALUE')
           -> where ('COLUMN_NAME', '!=', 'ACTIVESTATUS')->get();
           Log::info("in add KeyValue".$keyValueLabel);
@@ -87,11 +93,24 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
           {
             $keyValue = new KeyValues;
             $keyValue ->fill($req->all());
+            $validator = Validator::make($req->all(), [
+              'KEYVALUE' => 'required',
+              'KEYVALUETYPE' => 'required'
+          ]);
 
               Log::info("before save".$keyValue);
-            $keyValue->save();
+
             Log::info("in save keyvalue".$keyValue);
-            return DisplayController:: viewKeyValueList();
+            if ($validator->fails()) {
+                Log::info('here validator fails');
+            return redirect('/viewKeyValueList')
+                        ->withErrors($validator)
+                        ->withInput();
+        } else {
+            $keyValue->save();
+          return DisplayController:: viewKeyValueList();
+        }
+
 
           }
 
@@ -115,10 +134,24 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
             $project = new Projects;
             $project ->fill($req->all());
 
-              Log::info("before project save".$project);
-            $project->save();
-            Log::info("in save project".$project);
-            return DisplayController:: viewProjectList();
+            $validator = Validator::make($req->all(), [
+              'PROJECTNAME' => 'required',
+              'CLIENTNAME' => 'required'
+          ]);
+
+            if ($validator->fails()) {
+                Log::info('here validator fails');
+            return redirect('/viewProjectList')
+                        ->withErrors($validator)
+                        ->withInput();
+          } else {
+            Log::info("before project save".$project);
+          $project->save();
+          Log::info("in save project".$project);
+          return DisplayController:: viewProjectList();
+          }
+
+
 
           }
 
@@ -146,16 +179,40 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
             $client = new Clients;
             $client ->fill($req->all());
 
+            $validator = Validator::make($req->all(), [
+              'CLIENTNAME' => 'required',
+              'ADDRESS' => 'required',
+              'CLIENTEMAILID' => 'required',
+              'CONTACTTITLE' => 'required',
+              'CONTACTFIRSTNAME' => 'required',
+              'CONTACTLASTNAME' => 'required',
+              'CONTACTEMAILID' => 'required',
+              'MOBILENO' => 'required',
+                'FAXNO' => 'required',
+                  'PHONENO' => 'required',
+                  'FAXNO' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                Log::info('here validator fails');
+                return redirect('/viewClientList')
+                        ->withErrors($validator)
+                        ->withInput();
+            } else {
               Log::info("before client save".$client);
             $client->save();
             Log::info("in save keyvalue".$client);
             return DisplayController:: viewClientList();
+            }
+
+
 
           }
 
-          public function editClientList(Request $req)
+          public function editClientList(Request $req, $Id)
           {
             $client = new Clients;
+            $client = Clients::find($Id);
             $client ->fill($req->all());
 
               Log::info("before client edit".$client);
@@ -173,12 +230,27 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
             $activityList = new ActivityList;
             $activityList ->fill($req->all());
 
+            $validator = Validator::make($req->all(), [
+              'CATEGORY' => 'required',
+              'ACTIVITY' => 'required'
+          ]);
+
+            if ($validator->fails()) {
+                Log::info('here validator fails');
+            return redirect('/viewActivityList')
+                        ->withErrors($validator)
+                        ->withInput();
+        } else {
+
+
+
               Log::info("before activity list save".$activityList);
             $activityList->save();
             Log::info("in save activity list".$activityList);
             return DisplayController:: viewActivityList();
 
           }
+        }
           public function editActivityList(Request $req, $Id)
           {
             $activityList = new ActivityList;
@@ -198,7 +270,7 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
           public function viewClientList()
           {
 
-            $clientsList = Clients::orderBy('ID', 'asc')->get();
+            $clientsList = Clients::orderBy('LASTUPDATEDATE', 'desc')->get();
             $clientLabel = Table_Column_Names::orderBy('ID', 'asc')
             -> where ('MODULE','=','CLIENT')
             -> where ('COLUMN_NAME', '!=', 'S.NO')
@@ -275,10 +347,25 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
       $activist = new Activists;
       $activist ->fill($req->all());
 
+      $validator = Validator::make($req->all(), [
+        'TITLE' => 'required',
+        'FIRST_NAME' => 'required',
+        'LAST_NAME' => 'required',
+        'EMAILID' => 'required',
+        'MOBILE_NUMBER' => 'required'
+      ]);
+
+      if ($validator->fails()) {
+          Log::info('here validator fails');
+          return redirect('/Activists')
+                  ->withErrors($validator)
+                  ->withInput();
+      } else {
         Log::info("before save".$activist);
       $activist->save();
       Log::info("in save".$activist);
       return DisplayController:: displayActivists();
+      }
 
     }
 
