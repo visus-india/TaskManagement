@@ -6,9 +6,9 @@
                         <h4>
                             About Us</h4>
                         <ul>
-                            <li><a href="http://gaddieltech.com/">gaddieltech.com</a></li>
-                            <li><a href="http://gaddieltech.com/index.php/why-us">Why Us</a></li>
-                            <li><a href="http://gaddieltech.com/index.php/products/mobile-applications">Mobile Applications</a></li>
+                            <li><a href="http://gaddieltech.com/" target="_blank">gaddieltech.com</a></li>
+                            <li><a href="http://gaddieltech.com/index.php/why-us" target="_blank">Why Us</a></li>
+                            <li><a href="http://gaddieltech.com/index.php/products/mobile-applications" target="_blank">Mobile Applications</a></li>
                         </ul>
                     </div>
                     <!-- /span3 -->
