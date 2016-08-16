@@ -2,6 +2,7 @@
 @extends('layouts.app')
 @section('content')
 <style>
+
 table.dataTable thead th {
 
 	border-right:1px solid #ddd;
@@ -17,13 +18,15 @@ table.dataTable thead th {
 </style>
 <script>
 
+
+
 jQuery(document).ready(function($){
   	$('#client').change(function(){
 			$.get("{{ url('/getProjects')}}",
 				{ option: $(this).val() },
 				function(data) {
 					var project = $('#project');
-					project.empty();
+					// project.empty();
 
 					$.each(data, function(index, element) {
 
@@ -40,7 +43,7 @@ jQuery(document).ready(function($){
 					{ option: $(this).val() },
 					function(data) {
 						var project = $('#projectsearch');
-						project.empty();
+						// project.empty();
 
 						$.each(data, function(index, element) {
 
@@ -55,7 +58,7 @@ jQuery(document).ready(function($){
 				{ option: $(this).val() },
 				function(data) {
 					var category = $('#category');
-					category.empty();
+					// category.empty();
 
 					$.each(data, function(index, element) {
 									category.append("<option value='"+ element.CATEGORY +"'>" + element.CATEGORY + "</option>");
@@ -213,8 +216,8 @@ $(document).ready(function() {
 <div class="row">
 <div class="span12">
   <div class="widget">
-    <div class="widget-header"> <i class="icon-bookmark"></i>
-      <h3>Important Shortcuts</h3>
+    <div class="widget-header"> <i class="icon-dashboard"></i>
+      <h3>DashBoard</h3>
     </div>
     <!-- /widget-header -->
     <div class="widget-content">
@@ -240,14 +243,15 @@ $(document).ready(function() {
 				    <span class="shortcut-label">Projects</span> </a>
 
 
-						<a href={!! url('/Tasks') !!} class="shortcut">
-							<i class="shortcut-icon icon-list-alt"></i>
-								<span class="shortcut-label">Task List</span> </a>
+
 
 
 		<a href={!! url('/projectSetup') !!} class="shortcut">
 		  <i class="shortcut-icon icon-bookmark"></i>
-		    <span class="shortcut-label">Project Setup</span> </a>
+		    <span class="shortcut-label">Project Task Setup</span> </a>
+				<a href={!! url('/Tasks') !!} class="shortcut">
+					<i class="shortcut-icon icon-list-alt"></i>
+						<span class="shortcut-label"> Task Compliance </span> </a>
 
 </div>
       <!-- /shortcuts -->
@@ -337,7 +341,7 @@ $(document).ready(function() {
   {!! Form::label('Category ', 'Category' ,array('style'=>'font-weight:600; text-transform: uppercase;')); !!}
                    <select id="category" name="category[]" data-placeholder ="Select Category" multiple="multiple">
 
-                    <option>Please choose the Project</option>
+                    <option>Please Choose the Project</option>
 
                    </select>
                  </td>
@@ -366,13 +370,13 @@ $(document).ready(function() {
     @endif
     @if (isset($tableColumns ) )
     <div class="widget-header"> <i class="icon-list-alt"></i>
-      <h3> Task List</h3>
+      <h3> Task List
+				@if (isset ($selected)) @foreach ($selected as $selected)
+				  - CLIENT - {{ $selected->CLIENTNAME  }} - PROJECT - {{ $selected->PROJECTNAME  }}  @endforeach
+				@endif
+			</h3>
     </div>
-		<div class="widget-content">
-			<h3>@if (isset ($selected)) @foreach ($selected as $selected)
-			 {{ $selected->CLIENTNAME  }} - {{ $selected->PROJECTNAME  }}  @endforeach
-			@endif </h3>
-		</div>
+
     <!-- /widget-header -->
     <div>
 
@@ -393,7 +397,12 @@ $(document).ready(function() {
                   <td>{{$projectactivity->CATEGORY}}</td>
                   <td>{{$projectactivity->ACTIVITY}}</td>
 
-                  <td>{{ $projectactivity->FIRST_NAME .' '.$projectactivity->LAST_NAME }}</td>
+                  <td>
+										<select>
+											<option value = {{$projectactivity->ACTIVISTID}}>	{{$projectactivity->FIRST_NAME . ' ' .$projectactivity->LAST_NAME}}</option>
+									</select>
+</td>
+
 									<input type ="hidden" name='ID' id = 'ID'  value ='{!! $projectactivity->ID !!}',class = 'form-control' style="width:60px">
 
 									<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -471,7 +480,9 @@ $(document).ready(function() {
 									<td>{{$projectactivityDisplay->CATEGORY}}</td>
 									<td>{{$projectactivityDisplay->ACTIVITY}}</td>
 
-									<td>{{ $projectactivityDisplay->FIRST_NAME .' '.$projectactivityDisplay->LAST_NAME }}</td>
+								<td>	<select>
+										<option value = {{$projectactivityDisplay->ACTIVISTID}}>	{{$projectactivityDisplay->FIRST_NAME . ' ' .$projectactivityDisplay->LAST_NAME}}</option>
+								</select></td>
 
 
 									<input type ="hidden" name='ID' id = 'ID'  value ='{!! $projectactivityDisplay->ID !!}',class = 'form-control' style="width:60px">
@@ -624,6 +635,15 @@ $(document).ready(function() {
                                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                       <h3 id="myModalLabel">Add Activist</h3>
                                     </div>
+																		@if (count($errors) > 0)
+											 <div class="alert alert-danger">
+											 <ul>
+											 		@foreach ($errors->all() as $error)
+											 				<li>{{ $error }}</li>
+											 		@endforeach
+											 </ul>
+											 </div>
+											 @endif
                                     <div class="modal-body">
                                       <table  class="table table-striped table-bordered">
                                 <thead>
@@ -637,7 +657,8 @@ $(document).ready(function() {
 
                                            <tr>
                                              <td>
-                                      {!! Form::label($activistLabel->COLUMN_DISPLAY, $activistLabel->COLUMN_DISPLAY , array('class' => ' control-label',)); !!}
+																							 <label>{{$activistLabel->COLUMN_DISPLAY }}<span class="red">*</span> </label>
+
                                     </td>
 
                                     <td>
@@ -647,7 +668,8 @@ $(document).ready(function() {
                                       @endforeach
                                       <tr>
                                         <td>
-                                          ACTIVE STATUS
+																					<label>ACTIVE STATUS<span class="red">*</span> </label>
+
                                         </td>
                                         <td>
                                           <select name="ACTIVE_STATUS"  id ="ACTIVE_STATUS" class='form-control input-sm' style="width:50px";  >
@@ -681,15 +703,7 @@ $(document).ready(function() {
                       <div class="widget-header span12" style ="text-align:center"> <i class="icon-list-alt"></i>
                         <h3> Activity List</h3>
                       </div>
-											@if (count($errors) > 0)
-		<div class="alert alert-danger">
-				<ul>
-						@foreach ($errors->all() as $error)
-								<li>{{ $error }}</li>
-						@endforeach
-				</ul>
-		</div>
-@endif
+
                       <!-- /widget-header -->
                       <div class="widget-content  span8 offset2">
                         <table id ="activityListTable" class="table table-striped table-bordered">
@@ -747,6 +761,15 @@ $(document).ready(function() {
                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           <h3 id="myModalLabel">Add Activity List</h3>
                         </div>
+												@if (count($errors) > 0)
+			<div class="alert alert-danger">
+					<ul><span id="error">
+							@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+							@endforeach </span>
+					</ul>
+			</div>
+	@endif
                         <div class="modal-body">
                           <table class="table table-striped table-bordered">
                     <thead>
@@ -762,10 +785,10 @@ $(document).ready(function() {
                             </tr>
                           </thead>
                           @if (isset($activityListLabel))
-                            {!! Form::open(array('url' => '/saveActivityList', 'method' => 'post')) !!}
+                            {!! Form::open(array('method' => 'post', 'id' => 'newactivityForm')) !!}
 														<tr>
 															<td>
-														{!! Form::label('CATEGORY', 'CATEGORY', array('class' => ' control-label')); !!}
+																<label>CATEGORY<span class="red">*</span> </label>
 													</td>
 													<td>
 														<select id="CATEGORY" name="CATEGORY">
@@ -781,7 +804,7 @@ $(document).ready(function() {
 													 <tr>
 
                                  <td>
-                          {!! Form::label('ACTIVITY', 'ACTIVITY' , array('class' => ' control-label')); !!}
+																	 <label>ACTIVITY<span class="red">*</span> </label>
                         </td>
 
                         <td>
@@ -791,7 +814,7 @@ $(document).ready(function() {
 
                           <tr>
                             <td>
-                              {!! Form::label('ACTIVE STATUS', 'ACTIVE STATUS' , array('class' => ' control-label')); !!}
+															<label>ACTIVE STATUS<span class="red">*</span> </label>
                             </td>
                                 <td>
                               <select  style="width:50px"; name="ACTIVESTATUS" >
@@ -913,9 +936,9 @@ $(document).ready(function() {
                           @if (isset($projectLabel) && isset($clientNames))
                             {!! Form::open(array('url' => '/saveProject', 'method' => 'post')) !!}
                             <tr>
-                              <td>
-                            {!! Form::label('CLIENT NAME', 'CLIENT NAME', array('class' => ' control-label')); !!}
-                          </td>
+                              <td style="white-space: nowrap">
+<label>	CLIENT NAME<span class="red">*</span> <label>
+													</td>
                           <td>
                             <select id="CLIENTID" name="CLIENTID">
                               <option>Select Client Name </option>
@@ -924,12 +947,15 @@ $(document).ready(function() {
                               @endforeach
 
                             </select>
+
                           </td>
                            @foreach ($projectLabel as $projectLabel)
 
                                <tr>
-                                 <td>
-                          {!! Form::label($projectLabel->COLUMN_DISPLAY, $projectLabel->COLUMN_DISPLAY , array('class' => ' control-label')); !!}
+                                 <td >
+<label>{{$projectLabel ->COLUMN_DISPLAY }}<span class="red">*</span> </label>
+
+
                         </td>
 
                         <td>
@@ -1055,7 +1081,8 @@ $(document).ready(function() {
 
                                <tr>
                                  <td>
-                          {!! Form::label($clientLabel->COLUMN_DISPLAY, $clientLabel->COLUMN_DISPLAY , array('class' => ' control-label')); !!}
+													<label>{{$clientLabel->COLUMN_DISPLAY }}<span class="red">*</span> </label>
+
                         </td>
 
                         <td>
@@ -1168,8 +1195,11 @@ $(document).ready(function() {
 
                                <tr>
                                  <td>
-                          {!! Form::label($keyValueLabel->COLUMN_DISPLAY, $keyValueLabel->COLUMN_DISPLAY , array('class' => ' control-label')); !!}
-                        </td>
+																	 <label>{{$keyValueLabel->COLUMN_DISPLAY }}<span class="red">*</span> </label>
+
+
+												</td>
+
 
                         <td>
                           {!! Form::text($keyValueLabel->COLUMN_DISPLAY, '',array('class'=> 'form-control','placeholder'=>'Enter '.$keyValueLabel->COLUMN_DISPLAY,'name' => $keyValueLabel->COLUMN_NAME)); !!}
