@@ -92,7 +92,8 @@ jQuery(document).ready(function($){
 		    $.ajax({
 		      url: 'addProjectActivity',
 		      type: "post",
-		      data: {'DATEDUE':$('input[name=DATEDUE]').val(),
+		      data: {'ACTIVISTID':$('select[name=ACTIVISTID]').val(),
+					'DATEDUE':$('input[name=DATEDUE]').val(),
 		'CLOSEDATE':$('input[name=CLOSEDATE]').val(),
 		'CONTACTTILE':$('input[name=CONTACTTILE]').val(),
 		'CONTACTFIRSTNAME':$('input[name=CONTACTFIRSTNAME]').val(),
@@ -391,6 +392,7 @@ $(document).ready(function() {
                </thead>
                <tbody>
                  @if (isset($projectactivity))
+								 
 
                  @foreach ($projectactivity as $projectactivity)
 								 <tr>
@@ -398,8 +400,16 @@ $(document).ready(function() {
                   <td>{{$projectactivity->ACTIVITY}}</td>
 
                   <td>
-										<select>
-											<option value = {{$projectactivity->ACTIVISTID}}>	{{$projectactivity->FIRST_NAME . ' ' .$projectactivity->LAST_NAME}}</option>
+										<select name='ACTIVISTID' id='ACTIVISTID'>
+											@foreach($activistsListAdded as $ala)
+
+											<option value = "{{$ala->ID}}"
+												@if ($projectactivity->ACTIVISTID == $ala->ID )
+														selected
+												 @endif
+											 > {{$ala->FIRST_NAME}}  {{$ala ->LAST_NAME}}</option>
+											@endforeach
+
 									</select>
 </td>
 
@@ -480,8 +490,17 @@ $(document).ready(function() {
 									<td>{{$projectactivityDisplay->CATEGORY}}</td>
 									<td>{{$projectactivityDisplay->ACTIVITY}}</td>
 
-								<td>	<select>
-										<option value = {{$projectactivityDisplay->ACTIVISTID}}>	{{$projectactivityDisplay->FIRST_NAME . ' ' .$projectactivityDisplay->LAST_NAME}}</option>
+								<td> <select name='ACTIVISTID' id='ACTIVISTID'>
+
+										@foreach($activistsListDisplay as $ala1)
+
+										<option value = "{{$ala1->ID}}"
+											@if ($projectactivityDisplay->ACTIVISTID == $ala1->ID )
+													selected
+											 @endif
+										 > {{$ala1->FIRST_NAME}}  {{$ala1 ->LAST_NAME}}</option>
+										@endforeach
+
 								</select></td>
 
 
