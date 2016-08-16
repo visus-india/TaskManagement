@@ -7,6 +7,10 @@ Bootstrap Admin Template by EGrappler.com
 /*------------------------------------------------------------------
 [1. Global]
 */
+span.red
+{
+color:red;
+}
 
 body {
 	background: #f9f6f1;
