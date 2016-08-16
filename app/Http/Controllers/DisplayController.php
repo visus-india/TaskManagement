@@ -255,20 +255,13 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
               'ACTIVITY' => 'required'
           ]);
 
-            if ($validator->fails()) {
-                Log::info('here validator fails');
-                if(Request::ajax())
-              {
-                  return Response::json(array('errors' => $messages));
-              }
-              else
-              {
-                  return Redirect::back()->withInput()->withErrors($validation);
-              }
-        } else {
-
-
-
+          if ($validator->fails()) {
+              Log::info('here validator fails');
+              return redirect('viewActivityList')
+                      ->withErrors($validator)
+                      ->withInput();
+          }else
+{
               Log::info("before activity list save".$activityList);
             $activityList->save();
             Log::info("in save activity list".$activityList);
