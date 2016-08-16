@@ -248,7 +248,7 @@ $(document).ready(function() {
 
 		<a href={!! url('/projectSetup') !!} class="shortcut">
 		  <i class="shortcut-icon icon-bookmark"></i>
-		    <span class="shortcut-label">Project Task Setup</span> </a>
+		    <span class="shortcut-label">Project Setup</span> </a>
 				<a href={!! url('/Tasks') !!} class="shortcut">
 					<i class="shortcut-icon icon-list-alt"></i>
 						<span class="shortcut-label"> Task Compliance </span> </a>
