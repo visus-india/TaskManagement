@@ -31,6 +31,8 @@ class DisplayController extends Controller
       // ->get();
 $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
         $projectSearch =  Projects::orderBy('ID', 'asc') ->get();
+
+
       	return view('welcome', ['taskSearch' => $taskSearch, 'projectSearch' =>$projectSearch, 'clientsearch' =>$clientsearch,
             'tableColumns' => $tableColumns]);
 
@@ -43,16 +45,28 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
         ->select('PROJECT_ACTIVITY.*','ACTIVISTS.FIRST_NAME as FIRST_NAME','ACTIVISTS.LAST_NAME as LAST_NAME', 'ACTIVISTS.ID as ActivistID1')
         ->where ('PROJECTID','=',$req->projectsearch)
         ->get();
+
+        $activistsListDisplay = Activists :: orderby('LASTUPDATEDATE','desc')
+        ->where ('ACTIVE_STATUS' ,'=', 'Y') ->get();
+                      Log::info ('in activist list'.$projectactivityDisplay);
         $taskSearch = "true";
         $tableColumns = Table_Column_Names::orderBy('ID', 'asc')
         -> where ('MODULE','=','TASK')->get();
-        $statusValue = KeyValues :: orderBy('ID' ,'desc')
+        $statusValue = KeyValues :: orderBy('SEQUENCE' ,'asc')
           ->where ('KEYVALUETYPE','=', 'Status') ->get();
+          $selected = new Projects;
+          $selected  = Projects::orderBy('PROJECTS.LASTUPDATEDATE','desc')
+          -> join ('CLIENTS', 'PROJECTS.CLIENTID', '=', 'CLIENTS.ID')
+          ->where ('PROJECTS.ID','=',$req->projectsearch )
+          -> where ('CLIENTID', '=', $req->clientsearch)
+                      -> get();
 
         $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
           $projectSearch =  Projects::orderBy('ID', 'asc') ->get();
-        return view('welcome', ['statusValue' => $statusValue, 'taskSearch' => $taskSearch, 'projectSearch' =>$projectSearch, 'clientsearch' =>$clientsearch,
-            'tableColumns' => $tableColumns,'projectactivityDisplay'=>$projectactivityDisplay]);
+        return view('welcome', ['selected' => $selected, 'statusValue' => $statusValue, 'taskSearch' => $taskSearch, 'projectSearch' =>$projectSearch, 'clientsearch' =>$clientsearch,
+            'tableColumns' => $tableColumns,
+            'projectactivityDisplay'=>$projectactivityDisplay,
+          'activistsListDisplay' => $activistsListDisplay]);
 
       }
       public function viewActivityList()
@@ -93,6 +107,12 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
           {
             $keyValue = new KeyValues;
             $keyValue ->fill($req->all());
+            $countKeyValues  = count(KeyValues::orderBy('KEYVALUETYPE','asc')
+                              ->where('KEYVALUETYPE','=', $req->KEYVALUETYPE)
+                              ->get());
+
+            $keyValue ->SEQUENCE = $countKeyValues+1;
+            Log::info("before validating keyvalue".$countKeyValues);
             $validator = Validator::make($req->all(), [
               'KEYVALUE' => 'required',
               'KEYVALUETYPE' => 'required'
@@ -136,7 +156,7 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
 
             $validator = Validator::make($req->all(), [
               'PROJECTNAME' => 'required',
-              'CLIENTNAME' => 'required'
+              'CLIENTID' => 'required'
           ]);
 
             if ($validator->fails()) {
@@ -237,9 +257,14 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
 
             if ($validator->fails()) {
                 Log::info('here validator fails');
-            return redirect('/viewActivityList')
-                        ->withErrors($validator)
-                        ->withInput();
+                if(Request::ajax())
+              {
+                  return Response::json(array('errors' => $messages));
+              }
+              else
+              {
+                  return Redirect::back()->withInput()->withErrors($validation);
+              }
         } else {
 
 
@@ -413,7 +438,7 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
       $projects =  Projects::orderBy('ID', 'asc') ->get();
       $clients =  Clients::orderBy('ID', 'asc') ->get();
       $category = ActivityList::groupBy('CATEGORY') ->get();
-      $activists = Activists::orderBy('ID', 'asc')->get();
+      $activists = Activists::orderBy('ID', 'asc')-> where ('ACTIVE_STATUS' ,'=', 'Y') ->get();
       Log::info('in project setup'.$activists);
       $tableColumns = Table_Column_Names::orderBy('ID', 'asc')
       -> where ('MODULE','=','TASK')->get();
@@ -437,7 +462,7 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
     {
       $selectedProject =$request->project;
       $selectedClient=$request->client;
-      $statusValue = KeyValues :: orderBy('ID' ,'desc')
+      $statusValue = KeyValues :: orderBy('SEQUENCE' ,'asc')
         ->where ('KEYVALUETYPE','=', 'Status') ->get();
       $activistID =$request->activistId;
       $client = new Clients;
@@ -483,9 +508,10 @@ $clientsearch =  Clients::orderBy('ID', 'asc') ->get();
                   -> get();
 
       Log::info ("before assigning project Name ". $projectactivity);
+      $activistsListAdded = Activists :: orderby('LASTUPDATEDATE','desc')
+      ->where ('ACTIVE_STATUS' ,'=', 'Y') ->get();
 
-
-      return view('welcome',[
+      return view('welcome',['activistsListAdded' =>$activistsListAdded,
           'selected' => $selected ,'statusValue' => $statusValue, 'tableColumns'=>$tableColumns,'projectactivity' =>$projectactivity]);
 
     }
