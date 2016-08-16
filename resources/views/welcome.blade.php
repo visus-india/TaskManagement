@@ -785,7 +785,7 @@ $(document).ready(function() {
                             </tr>
                           </thead>
                           @if (isset($activityListLabel))
-                            {!! Form::open(array('method' => 'post', 'id' => 'newactivityForm', 'url' =>'/editProjectList')) !!}
+                            {!! Form::open(array('method' => 'post', 'id' => 'newactivityForm', 'url' =>'/saveActivityList')) !!}
 														<tr>
 															<td>
 																<label>CATEGORY<span class="red">*</span> </label>
