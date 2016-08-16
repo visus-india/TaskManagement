@@ -237,7 +237,7 @@ $(document).ready(function() {
 
 				<a href={!! url('/Activists') !!} class="shortcut">
 				  <i class="shortcut-icon icon-user"></i>
-				    <span class="shortcut-label">Activists</span> </a>
+				    <span class="shortcut-label">Users</span> </a>
 
 				<a href={!! url('/viewProjectList') !!}  class="shortcut">
 				  <i class="shortcut-icon icon-list-alt"></i>
