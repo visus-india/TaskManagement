@@ -6,9 +6,9 @@
                         <h4>
                             About Us</h4>
                         <ul>
-                            <li><a href="javascript:;">gaddieltech.com</a></li>
-                            <li><a href="javascript:;">Web Development Resources</a></li>
-                            <li><a href="javascript:;">Responsive HTML5 Portfolio Templates</a></li>
+                            <li><a href="http://gaddieltech.com/">gaddieltech.com</a></li>
+                            <li><a href="http://gaddieltech.com/index.php/why-us">Why Us</a></li>
+                            <li><a href="http://gaddieltech.com/index.php/products/mobile-applications">Mobile Applications</a></li>
                         </ul>
                     </div>
                     <!-- /span3 -->
@@ -36,7 +36,7 @@
                         <h4>
                            Contact us</h4>
                         <ul>
-                            <li><a href="#">Gaddiel Technologies Pvt Ltd,</a></li>
+                            <li><a href="http://gaddieltech.com/">Gaddiel Technologies Private Limited,</a></li>
                             <li><a href="#">#9/34-E First Floor,DKV Complex,</a></li>
                             <li><a href="#">KK Nagar Po,Trichy 620021, India.</a></li>
                         </ul>
@@ -54,7 +54,7 @@
   <div class="footer-inner">
     <div class="container">
       <div class="row">
-        <div class="span12"> &copy; 2015 <a href="http://www.gaddieltech.com/">Gaddiel Technologies Pvt Ltd</a>. </div>
+        <div class="span12"> &copy; 2016 <a href="http://gaddieltech.com/">Gaddiel Technologies Private Limited</a>. </div>
         <!-- /span12 -->
       </div>
       <!-- /row -->
