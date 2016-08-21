@@ -17,7 +17,7 @@ use App\ProjectActivity;
 use App\ActivityList;
 
 Route::get('/app', function () {
-    return redirect('/app');
+    return view('/app');
 });
 
 Route::get('/', 'DisplayController@view');
