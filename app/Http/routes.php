@@ -16,7 +16,7 @@ use App\Clients;
 use App\ProjectActivity;
 use App\ActivityList;
 
-Route::get('app', function () {
+Route::get('/app', function () {
     return redirect('/app');
 })
 
