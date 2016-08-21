@@ -18,7 +18,7 @@ use App\ActivityList;
 
 Route::get('/app', function () {
     return redirect('/app');
-})
+});
 
 Route::get('/', 'DisplayController@view');
 Route::get('/Tasks', 'DisplayController@viewTasks');
