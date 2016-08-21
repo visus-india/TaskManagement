@@ -17,7 +17,7 @@ use App\ProjectActivity;
 use App\ActivityList;
 
 Route::get('/app', function () {
-    return view('/app');
+    return view('/api');
 });
 
 Route::get('/', 'DisplayController@view');
